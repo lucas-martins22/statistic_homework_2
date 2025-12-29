@@ -1,0 +1,155 @@
+box_muller_norm <- function(n, mu = 0, sigma = 1) {
+  m <- ceiling(n / 2)
+  
+  u1 <- runif(m)
+  u1[u1 == 0] <- .Machine$double.eps  # evita log(0)
+  u2 <- runif(m)
+  
+  r <- sqrt(-2 * log(u1))
+  theta <- 2 * pi * u2
+  
+  z1 <- r * cos(theta)
+  z2 <- r * sin(theta)
+  
+  z <- c(z1, z2)[1:n]
+  mu + sigma * z
+}
+
+set.seed(42)
+
+# 1) 1.000 temperaturas via Box-Muller (funcao do item 1)
+temp_bm <- box_muller_norm(1000, mu = 62, sigma = 3.5)
+
+# 2) 1.000 temperaturas via gerador normal embutido do R
+temp_rnorm <- rnorm(1000, mean = 62, sd = 3.5)
+
+
+# Media amostral
+# =========================
+
+# Box–Muller
+media_bm <- mean(temp_bm)
+
+# rnorm
+media_rnorm <- mean(temp_rnorm)
+
+media_bm
+media_rnorm
+
+
+
+# Desvio-padrao amostral
+# =========================
+
+# Box-Muller
+sd_bm <- sd(temp_bm)
+
+# rnorm
+sd_rnorm <- sd(temp_rnorm)
+
+sd_bm
+sd_rnorm
+
+
+# Temperatura minima e maxima observada
+# =========================
+
+# Box-Muller
+min_bm <- min(temp_bm)
+max_bm <- max(temp_bm)
+
+# rnorm
+min_rnorm <- min(temp_rnorm)
+max_rnorm <- max(temp_rnorm)
+
+min_bm; max_bm
+min_rnorm; max_rnorm
+
+#=========================
+# Questao 3 — Item 3 (d): Probabilidade empirica P(T > 68)
+#==========================
+# Box–Muller
+p_emp_bm_gt68 <- mean(temp_bm > 68)
+
+# rnorm
+p_emp_rnorm_gt68 <- mean(temp_rnorm > 68)
+
+p_emp_bm_gt68
+p_emp_rnorm_gt68
+
+
+# Probabilidade empirica P(60 < T < 65)
+# =========================
+
+# Box-Muller
+p_emp_bm_60_65 <- mean(temp_bm > 60 & temp_bm < 65)
+
+# rnorm
+p_emp_rnorm_60_65 <- mean(temp_rnorm > 60 & temp_rnorm < 65)
+
+p_emp_bm_60_65
+p_emp_rnorm_60_65
+
+#==========================
+#Item 4 (a): Histograma das temperaturas simuladas (separados)
+# =========================
+
+par(mfrow = c(1, 2))
+
+# Box-Muller
+hist(
+  temp_bm,
+  breaks = 30,
+  main = "Temperaturas (Box-Muller)",
+  xlab = "Temperatura (C)",
+  ylab = "Frequencia"
+)
+
+# rnorm
+hist(
+  temp_rnorm,
+  breaks = 30,
+  main = "Temperaturas (rnorm)",
+  xlab = "Temperatura (C)",
+  ylab = "Frequencia"
+)
+
+par(mfrow = c(1, 1))
+
+#==========================
+# Item 4 (b): PDF normal teorica sobreposta ao histograma
+# =========================
+
+# Parametros teoricos
+mu <- 62
+sigma <- 3.5
+
+# Box-Muller: hist + PDF
+hist(
+  temp_bm,
+  breaks = 30,
+  freq = FALSE,  # densidade
+  main = "Box-Muller: histograma + PDF teorica",
+  xlab = "Temperatura (C)",
+  ylab = "Densidade"
+)
+curve(
+  dnorm(x, mean = mu, sd = sigma),
+  add = TRUE,
+  lwd = 2
+)
+
+# rnorm: hist + PDF
+hist(
+  temp_rnorm,
+  breaks = 30,
+  freq = FALSE,  # densidade
+  main = "rnorm: histograma + PDF teorica",
+  xlab = "Temperatura (C)",
+  ylab = "Densidade"
+)
+curve(
+  dnorm(x, mean = mu, sd = sigma),
+  add = TRUE,
+  lwd = 2
+)
