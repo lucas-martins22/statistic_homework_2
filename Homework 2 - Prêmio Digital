@@ -1,0 +1,127 @@
+set.seed(42)
+
+# Parâmetros do problema
+n <- 1e7
+p <- 1e-7
+lambda <- n * p  # = 1
+
+cat("n =", n, "\n")
+cat("p =", p, "\n")
+cat("lambda = n*p =", lambda, "\n\n")
+
+# -------------------------
+# Item 2.2: E[X] e Var(X)
+# -------------------------
+  EX_bin <- n * p
+  Var_bin <- n * p * (1 - p)
+  
+  EX_pois <- lambda
+  Var_pois <- lambda
+  
+  cat("=== BINOMIAL (EXATO) ===\n")
+  cat("E[X] =", EX_bin, "\n")
+  cat("Var(X) =", Var_bin, "\n\n")
+  
+  cat("=== POISSON (APROX) ===\n")
+  cat("E[X] =", EX_pois, "\n")
+  cat("Var(X) =", Var_pois, "\n\n")
+  
+  cat("=== DIFERENÇAS ===\n")
+  cat("|Var_pois - Var_bin| =", abs(Var_pois - Var_bin), "\n")
+  cat("Diferença relativa na variância =", abs(Var_pois - Var_bin) / Var_pois, "\n\n")
+
+# -------------------------
+# Item 2.3: P(receber o prêmio) = E[1/(W+1)], W ~ Pois(1)
+# Teórico: 1 - exp(-1)
+# -------------------------
+p_teorico <- 1 - exp(-lambda)
+cat("\n=== ITEM 2.3 ===\n")
+cat("Valor teórico: 1 - exp(-1) =", p_teorico, "\n")
+
+# Soma truncada
+Wmax <- 60
+w <- 0:Wmax
+p_soma <- sum((1 / (w + 1)) * dpois(w, lambda = lambda))
+tail_prob <- 1 - ppois(Wmax, lambda = lambda)
+
+cat("Aproximação por soma (0..", Wmax, ") =", p_soma, "\n", sep="")
+cat("Massa na cauda ignorada P(W>", Wmax, ") =", tail_prob, "\n", sep="")
+
+# Simulação
+B <- 5e5 #podemos aumentar pra qualquer valor.
+W <- rpois(B, lambda = lambda)
+p_sim <- mean(1 / (W + 1))
+
+cat("Estimativa por simulação =", p_sim, "\n")
+cat("Erro absoluto vs teórico =", abs(p_sim - p_teorico), "\n\n")
+
+# -------------------------
+# Item 2.4: Comparação direta BIN X POIS
+# Vamos realizar simulações pra comparar diretamente
+# -------------------------
+
+# Número de "dias" simulados
+B <- 200000  # pode aumentar se quiser (ex.: 1e6)
+
+# Simulações
+x_bin  <- rbinom(B, size = n, prob = p)        # modelo exato
+x_pois <- rpois(B, lambda = lambda)            # aproximação
+
+# ---- Comparação visual (histogramas) ----
+# Para lambda=1, os valores ficam concentrados em poucos inteiros (0,1,2,3,...)
+max_k <- max(quantile(c(x_bin, x_pois), 0.999), 10)
+breaks_int <- seq(-0.5, max_k + 0.5, by = 1)
+
+par(mfrow = c(1, 2))
+
+hist(
+  x_bin, breaks = breaks_int, freq = FALSE,
+  main = "Binomial (exata)",
+  xlab = "Número de vencedores (X)",
+  ylab = "Densidade"
+)
+# PMF teórica binomial nos inteiros
+k <- 0:max_k
+points(k, dbinom(k, size = n, prob = p), pch = 16)
+
+hist(
+  x_pois, breaks = breaks_int, freq = FALSE,
+  main = "Poisson (aprox.)",
+  xlab = "Número de vencedores (X)",
+  ylab = "Densidade"
+)
+# PMF teórica Poisson nos inteiros
+points(k, dpois(k, lambda = lambda), pch = 16)
+
+par(mfrow = c(1, 1))
+
+# ---- Comparação direta (lado a lado por k) ----
+# Frequências empíricas
+tab_bin  <- table(factor(x_bin, levels = k))
+tab_pois <- table(factor(x_pois, levels = k))
+
+emp_bin  <- as.numeric(tab_bin)  / B
+emp_pois <- as.numeric(tab_pois) / B
+
+# Probabilidades teóricas
+th_bin  <- dbinom(k, size = n, prob = p)
+th_pois <- dpois(k, lambda = lambda)
+
+# Gráfico comparando empírico vs teórico (em um só)
+plot(
+  k, emp_bin, type = "b", pch = 16,
+  xlab = "k",
+  ylab = "Probabilidade",
+  main = "Comparação: Empírico vs Teórico"
+)
+lines(k, th_bin, type = "b", pch = 1, lty = 2)
+lines(k, emp_pois, type = "b", pch = 17)
+lines(k, th_pois, type = "b", pch = 2, lty = 2)
+
+legend(
+  "topright",
+  legend = c("Empírico Binomial", "Teórico Binomial", "Empírico Poisson", "Teórico Poisson"),
+  pch = c(16, 1, 17, 2),
+  lty = c(1, 2, 1, 2),
+  bty = "n"
+)
