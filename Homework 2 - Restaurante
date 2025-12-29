@@ -1,0 +1,55 @@
+# Parametros da distribuicao binomial
+n <- 50
+p <- 0.7
+
+# Suporte da variavel aleatoria
+x <- 0:n
+
+# PMF e CDF
+pmf <- dbinom(x, size = n, prob = p)
+cdf <- pbinom(x, size = n, prob = p)
+
+# Grafico da PMF
+plot(x, pmf,
+     type = "h",
+     lwd = 2,
+     col = "blue",
+     main = "PMF - Binomial(n = 50, p = 0.7)",
+     xlab = "x",
+     ylab = "P(X = x)")
+points(x, pmf, pch = 16, col = "blue")
+
+# Grafico da CDF
+plot(x, cdf,
+     type = "s",
+     lwd = 2,
+     col = "red",
+     main = "CDF - Binomial(n = 50, p = 0.7)",
+     xlab = "x",
+     ylab = "P(X <= x)")
+
+valor_esperado <- sum(x * pmf)
+
+# Variancia via definicao
+variancia <- sum(x^2 * pmf) - valor_esperado^2
+
+# Desvio padrao
+desvio_padrao <- sqrt(variancia)
+
+valor_esperado
+variancia
+desvio_padrao
+
+# (a) P(X >= 20)
+prob_a <- 1 - pbinom(19, size = n, prob = p)
+
+# (b) P(30 < X < 43) = P(31 <= X <= 42)
+prob_b <- pbinom(42, size = n, prob = p) - pbinom(30, size = n, prob = p)
+
+# (c) P(X = 31)
+prob_c <- dbinom(31, size = n, prob = p)
+
+prob_a
+prob_b
+prob_c
+  
