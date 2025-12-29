@@ -1,0 +1,1427 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}  % para \mathbb{E}
+\usepackage[nameinlink]{cleveref} % referências automáticas (Figura/Tabela)
+
+% Padroniza como "Figura" e "Tabela"
+\crefname{figure}{Figura}{Figuras}
+\Crefname{figure}{Figura}{Figuras}
+\crefname{table}{Tabela}{Tabelas}
+\Crefname{table}{Tabela}{Tabelas}
+
+% Macros de notação (opcional, mas ajuda a padronizar)
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\mathrm{Var}}
+
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{titleps}
+\usepackage{placeins} % Para controlar a posição das figuras
+\usepackage{caption} % Melhor controle de legendas
+\captionsetup{
+  font=small,
+  labelfont=bf
+}
+\usepackage[most]{tcolorbox}
+\usepackage{mdframed}  
+% para o box
+
+% Definindo um estilo para o box
+\newmdenv[
+  linecolor=black,
+  linewidth=1pt,
+  roundcorner=5pt,
+  innertopmargin=10pt,
+  innerbottommargin=10pt,
+  innerleftmargin=10pt,
+  innerrightmargin=10pt,
+  frametitlebackgroundcolor=gray!20,
+  frametitlefont=\normalfont\bfseries,
+  frametitle={Equivalências usando apenas NAND}
+]{myformula}
+\tcbset{
+  myformula/.style={
+    colback=blue!5!white,
+    colframe=blue!75!black,
+    fonttitle=\bfseries,
+    title=#1,
+    boxrule=0.5mm,
+    arc=2mm,
+    top=2mm,
+    bottom=2mm,
+    left=2mm,
+    right=2mm
+  }
+}
+
+
+\geometry{
+    a4paper,
+    left=25mm,
+    right=25mm,
+    top=20mm,
+    bottom=20mm
+}
+
+% Configuração da página de título
+\newcommand{\customtitlepage}{
+    \begin{titlepage}
+        \vspace*{-0.4cm}
+        \begin{figure}
+            \centering
+            \includegraphics[width=0.5\linewidth]{imagens/logoUFC.png}
+        \end{figure}
+        \centering
+        {\large \textbf{ESTATÍSTICA PARA ENGENHARIA} \par}
+        \vspace{2cm}
+        {\large \textbf{HOMEWORK 2} \par}
+        \vspace{5cm}
+        
+        \vspace{0.5cm}
+        \begin{flushleft}
+        {\large \textbf{Alunos:} \par}
+            \large
+            JOAO VICTOR MARQUES FALCÃO, 567357\\
+            LUCAS MARTINS MENEZES, 565788
+        \end{flushleft}
+        \vfill
+    \end{titlepage}
+}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Configurações para o destaque do código
+\lstset{
+    language=R, % Define a linguagem de programação (pode ser R, Python, C++, etc.)
+    backgroundcolor=\color[rgb]{0.95,0.95,0.95}, % Cor de fundo cinza claro
+    commentstyle=\color{gray}, % Cor dos comentários
+    keywordstyle=\color{blue}, % Cor das palavras-chave
+    stringstyle=\color{red}, % Cor das strings
+    basicstyle=\small\ttfamily, % Fonte e tamanho do texto
+    numberstyle=\tiny\color{gray}, % Fonte e cor dos números de linha
+    numbers=left, % Posição da numeração
+    frame=single, % Adiciona uma moldura ao redor do código
+    rulecolor=\color{black},
+    showspaces=false,
+    showtabs=false,
+    tabsize=2,
+    breaklines=true,
+    breakatwhitespace=false,
+}
+
+\begin{document}
+
+\customtitlepage
+
+
+\section{Sobremesa de Restaurante}
+
+O comportamento de consumo em estabelecimentos comerciais é um fator de grande interesse tanto do ponto de vista econômico quanto estatístico. Em restaurantes de grande movimento, decisões aparentemente simples, como optar ou não por uma sobremesa após o prato principal, refletem padrões de preferência dos clientes e podem ser analisadas de forma quantitativa a partir de modelos probabilísticos.
+
+O Problema 1 aborda exatamente esse tipo de situação. Considera-se um restaurante muito frequentado, no qual aproximadamente 70\% dos clientes optam por pedir sobremesa após a refeição principal. A partir desse cenário, observa-se uma amostra aleatória de 
+$n = 50$ clientes, com o objetivo de analisar o número de indivíduos que realizam esse pedido.
+
+Do ponto de vista estatístico, cada cliente representa um ensaio independente, no qual existem apenas dois resultados possíveis: pedir sobremesa ou não pedir sobremesa. Assim, o foco da análise está na contagem do número de sucessos — definidos como pedidos de sobremesa — ao longo de um número fixo de observações, sob uma probabilidade constante de ocorrência. Esse tipo de estrutura fornece a base para a modelagem da variável aleatória associada ao problema e para a aplicação de conceitos fundamentais de variáveis aleatórias discretas e distribuições de probabilidade.
+
+\subsection{Função de Distribuição}
+Seja $X$ a variável aleatória que representa o número de clientes que pedem sobremesa após o prato principal em uma amostra aleatória de $n = 50$ clientes. Cada cliente observado pode ser entendido como um ensaio independente, no qual existem apenas dois resultados possíveis: pedir sobremesa ou não pedir sobremesa.
+
+De acordo com o enunciado do problema, a probabilidade de um cliente pedir sobremesa é aproximadamente constante e igual a $p = 0{,}7$. Dessa forma, o experimento consiste em um número fixo de ensaios independentes, cada um com dois possíveis desfechos e com probabilidade constante de sucesso, sendo o sucesso definido como o pedido de sobremesa.
+
+Essas características satisfazem integralmente as condições necessárias para a aplicação do modelo de distribuição binomial. Assim, a variável aleatória $X$ segue uma distribuição binomial com parâmetros $n = 50$ e $p = 0{,}7$, sendo formalmente representada por:
+
+\[
+X \sim \text{Bin}(50,\;0{,}7)
+\]
+
+\subsection{Função Massa de Probabilidade (PMF) e Função Distribuição Acumulada (CDF)}
+
+Uma vez estabelecido que $X \sim \text{Bin}(50,\;0{,}7)$, podemos construir tanto a \textbf{função massa de probabilidade (PMF)} quanto a \textbf{função distribuição acumulada (CDF)} da variável aleatória.
+
+\subsubsection*{PMF (Probability Mass Function)}
+A PMF descreve a probabilidade de a variável aleatória assumir exatamente um valor $x$, isto é, $P(X=x)$. Para a distribuição binomial, a PMF é dada por:
+
+\[
+P(X=x)=\binom{50}{x}(0{,}7)^x(0{,}3)^{50-x}, \quad x = 0,1,2,\dots,50
+\]
+
+\subsubsection*{CDF (Cumulative Distribution Function)}
+A CDF representa a probabilidade acumulada até um certo valor, isto é, $P(X \le x)$. Como $X$ é discreta, a CDF é definida como a soma das probabilidades da PMF até o valor $x$:
+
+\[
+F(x)=P(X \le x)=\sum_{k=0}^{\lfloor x \rfloor}\binom{50}{k}(0{,}7)^k(0{,}3)^{50-k}
+\]
+
+Como se trata de uma variável aleatória discreta, o gráfico da CDF possui o formato de \textit{escada}, apresentando saltos apenas nos valores inteiros de $x$.
+
+\subsubsection*{Construção dos gráficos no R}
+Para construir os gráficos da PMF e da CDF, utilizamos as funções nativas do R \texttt{dbinom()} (para a PMF) e \texttt{pbinom()} (para a CDF), considerando o suporte $x = 0,1,\dots,50$.
+
+\begin{lstlisting}
+# Parametros da distribuicao binomial
+n <- 50
+p <- 0.7
+
+# Suporte da variavel aleatoria
+x <- 0:n
+
+# PMF e CDF
+pmf <- dbinom(x, size = n, prob = p)
+cdf <- pbinom(x, size = n, prob = p)
+
+# Grafico da PMF
+plot(x, pmf,
+     type = "h",
+     lwd = 2,
+     col = "blue",
+     main = "PMF - Binomial(n = 50, p = 0.7)",
+     xlab = "x",
+     ylab = "P(X = x)")
+points(x, pmf, pch = 16, col = "blue")
+
+# Grafico da CDF
+plot(x, cdf,
+     type = "s",
+     lwd = 2,
+     col = "red",
+     main = "CDF - Binomial(n = 50, p = 0.7)",
+     xlab = "x",
+     ylab = "P(X <= x)")
+\end{lstlisting}
+
+\FloatBarrier
+Como mostrado na \Cref{fig:q1-pmf}, a função massa de probabilidade (PMF) da Binomial$(50,0{,}7)$
+é unimodal e concentra-se em torno do valor esperado \(E[X]=np=35\).
+A \Cref{fig:q1-cdf} apresenta o crescimento em degraus típico da CDF de uma variável discreta.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth]{imagens/pmf.png}
+    \caption{PMF da distribuição Binomial\((n=50,\,p=0{,}7)\).}
+    \label{fig:q1-pmf}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.90\linewidth]{imagens/cdf.png}
+    \caption{CDF da distribuição Binomial\((n=50,\,p=0{,}7)\).}
+    \label{fig:q1-cdf}
+\end{figure}
+\FloatBarrier
+
+
+
+A partir dos gráficos obtidos, observa-se que a PMF apresenta um comportamento unimodal, com maior concentração de probabilidade em torno do valor esperado da distribuição, dado por $E[X]=np=50\cdot 0{,}7=35$. O que, institivamente, faz todo o sentido. Se temos 50 clientes e a estatística geral implica que 70\% de todos os clientes pedem sobremesa após o prato principal, o mais comum é que 70\% dos 50 clientes observados peçam sobremesa. nesse caso, existe aproximadamente 12\% de chance de que, aproximadamente, 35 clientes peçam sobremesa. Já a CDF cresce de forma monotônica e em degraus, acumulando a probabilidade total até atingir 1 em $x=50$.
+
+\subsection{Valor Esperado, Variância e Desvio Padrão de $X$}
+
+Uma vez estabelecido que a variável aleatória $X$ segue uma distribuição binomial com parâmetros
+$n = 50$ e $p = 0{,}7$, podemos calcular suas principais medidas teóricas: o valor esperado, a variância
+e o desvio padrão.
+
+Para uma variável aleatória com distribuição binomial $X \sim \text{Bin}(n,p)$, o valor esperado é dado por:
+\[
+E[X] = np
+\]
+
+Substituindo os valores do problema, obtemos:
+\[
+E[X] = 50 \cdot 0{,}7 = 35
+\]
+
+Assim, espera-se que, em média, 35 dos 50 clientes observados peçam sobremesa após o prato principal.
+
+\subsubsection*{Dedução da Variância da Distribuição Binomial}
+Sabemos, com o que foi apresentado explicitamente em sala de aula, que a variância \(\Var(X)\) de uma distribuição binomial é:
+\[
+\Var(X) = np(1-p).
+\]
+
+Ainda assim, podemos obter essa equação a partir de outra ferramentas mais elementais a fim de possamos obter a equação simplificada d variância de qualuer distibuição sem decorar. De forma geral, a variância de uma variável aleatória discreta pode ser expressa pela identidade fundamental:
+\[
+\mathrm{Var}(X) = E[X^2] - (E[X])^2
+\]
+
+Para deduzir a variância da distribuição binomial, considera-se que a variável aleatória $X$ pode ser escrita
+como a soma de $n$ variáveis aleatórias de Bernoulli independentes:
+\[
+X = \sum_{i=1}^{n} Y_i,
+\]
+onde cada $Y_i$ assume valor 1 se o $i$-ésimo cliente pede sobremesa e 0 caso contrário, com
+$P(Y_i = 1) = p$.
+
+Para uma variável de Bernoulli, temos:
+\[
+E[Y_i] = p
+\quad \text{e} \quad
+E[Y_i^2] = E[Y_i] = p,
+\]
+uma vez que $Y_i^2 = Y_i$.
+
+Utilizando a linearidade da esperança matemática, obtemos:
+\[
+E[X] = E\!\left[\sum_{i=1}^{n} Y_i\right] = \sum_{i=1}^{n} E[Y_i] = np,
+\]
+confirmando o valor esperado já calculado.
+
+Agora, calculamos $E[X^2]$. Observando que:
+\[
+X^2 = \left(\sum_{i=1}^{n} Y_i\right)^2
+= \sum_{i=1}^{n} Y_i^2 + 2\sum_{i<j} Y_i Y_j,
+\]
+temos:
+\[
+E[X^2] = \sum_{i=1}^{n} E[Y_i^2] + 2\sum_{i<j} E[Y_i Y_j].
+\]
+
+Como os ensaios são independentes:
+\[
+E[Y_i Y_j] = E[Y_i]E[Y_j] = p^2,
+\]
+e, portanto:
+\[
+E[X^2] = np + 2\binom{n}{2}p^2 = np + n(n-1)p^2.
+\]
+
+Aplicando a fórmula fundamental da variância:
+\[
+\mathrm{Var}(X) = E[X^2] - (E[X])^2,
+\]
+obtemos:
+\[
+\mathrm{Var}(X) = \left[np + n(n-1)p^2\right] - (np)^2
+= np + n(n-1)p^2 - n^2p^2.
+\]
+
+Simplificando a expressão:
+\[
+\mathrm{Var}(X) = np(1-p).
+\]
+
+\subsubsection*{Aplicação ao Problema}
+
+Substituindo os valores $n = 50$ e $p = 0{,}7$, temos:
+\[
+\mathrm{Var}(X) = 50 \cdot 0{,}7 \cdot (1 - 0{,}7)
+= 50 \cdot 0{,}7 \cdot 0{,}3
+= 10{,}5.
+\]
+
+O desvio padrão é dado pela raiz quadrada da variância:
+\[
+\sigma_X = \sqrt{\mathrm{Var}(X)} = \sqrt{10{,}5} \approx 3{,}24.
+\]
+
+Esses resultados indicam que, embora o número médio esperado de clientes que pedem sobremesa seja 35,
+ocorrem variações naturais em torno desse valor, com uma dispersão típica de aproximadamente 3,24 clientes.
+
+
+Para confirmar esses valores obtidos manualmente podemos utilizar o seguinte script simples em R, também aplicando as fórmulas que já havíamos obtido.
+\\
+\begin{lstlisting}
+valor_esperado <- sum(x * pmf)
+
+# Variancia via definicao
+variancia <- sum(x^2 * pmf) - valor_esperado^2
+
+# Desvio padrao
+desvio_padrao <- sqrt(variancia)
+
+valor_esperado
+variancia
+desvio_padrao
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{\includegraphics[width=0.3\linewidth]{imagens/check1.png}}
+    \caption{Saída do R confirmando \(E[X]\), \(\Var(X)\) e \(\sigma_X\) para \(X\sim\mathrm{Bin}(50,0{,}7)\).}
+    \label{fig:q1-check-momentos}
+\end{figure}
+
+A validação computacional (ver \Cref{fig:q1-check-momentos}) confirma os valores teóricos obtidos.
+
+\subsection{Cálculo de Probabilidades}
+
+Considerando a variável aleatória já estabelecida e analisada $X \sim \text{Bin}(50,\;0{,}7)$. Nesta subseção, calculamos as probabilidades solicitadas utilizando a função de distribuição acumulada da distribuição binomial.
+
+\subsubsection*{(a) $P(X \ge 20)$}
+
+A probabilidade de $X$ assumir valores maiores ou iguais a 20 pode ser calculada utilizando o complemento da função distribuição acumulada:
+\[
+P(X \ge 20) = 1 - P(X \le 19).
+\]
+
+Assim, temos:
+\[
+P(X \ge 20) = 1 - \sum_{k=0}^{19} \binom{50}{k}(0{,}7)^k(0{,}3)^{50-k}.
+\]
+
+Numericamente, obtemos:
+\[
+P(X\ge 20)=1-P(X\le 19)\approx 0{,}9999971533.
+\]
+
+\subsubsection*{(b) $P(30 < X < 43)$}
+
+Como $X$ é uma variável aleatória discreta, o evento $30 < X < 43$ equivale a $31 \le X \le 42$. Logo:
+\[
+P(30 < X < 43) = P(31 \le X \le 42)
+= P(X \le 42) - P(X \le 30).
+\]
+
+Portanto:
+\[
+P(30 < X < 43)
+= \sum_{k=0}^{42} \binom{50}{k}(0{,}7)^k(0{,}3)^{50-k}
+- \sum_{k=0}^{30} \binom{50}{k}(0{,}7)^k(0{,}3)^{50-k}.
+\]
+
+Como \(X\) é discreta, \(30<X<43 \iff X\in\{31,32,\dots,42\}\). Assim:
+\[
+P(30<X<43)=\sum_{k=31}^{42}P(X=k)\approx 0{,}9079331984.
+\]
+
+\subsubsection*{(c) $P(X = 31)$}
+
+A probabilidade pontual de $X$ assumir exatamente o valor 31 é dada diretamente pela função massa de probabilidade da binomial:
+\[
+P(X = 31) = \binom{50}{31}(0{,}7)^{31}(0{,}3)^{19}.
+\]
+
+A probabilidade pontual é:
+\[
+P(X=31)=\binom{50}{31}(0{,}7)^{31}(0{,}3)^{19}\approx 0{,}0557572778.
+\]
+
+\subsubsection*{Validação Computacional no R}
+
+Os valores obtidos teoricamente foram calculados e validados no software R utilizando a função \texttt{pbinom()} para probabilidades acumuladas e \texttt{dbinom()} para probabilidades pontuais:
+
+\begin{lstlisting}
+# Parametros da distribuicao
+n <- 50
+p <- 0.7
+
+# (a) P(X >= 20)
+prob_a <- 1 - pbinom(19, size = n, prob = p)
+
+# (b) P(30 < X < 43) = P(31 <= X <= 42)
+prob_b <- pbinom(42, size = n, prob = p) - pbinom(30, size = n, prob = p)
+
+# (c) P(X = 31)
+prob_c <- dbinom(31, size = n, prob = p)
+
+prob_a
+prob_b
+prob_c
+\end{lstlisting}
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{\includegraphics[width=0.3\linewidth]{imagens/check2.png}}
+    \caption{Saída do R confirmando \(P(X \ge 20)\), \(P(30 < X < 43)\) e \(P(X = 31)\) para \(X\sim\mathrm{Bin}(50,0{,}7)\).}
+    \label{fig:q2-check-momentos}
+\end{figure}
+
+
+\begin{center}
+\begin{tabular}{lccc}
+\hline
+\textbf{Quantidade} & \textbf{Teórico} & \textbf{R} & \textbf{Dif. abs.}\\
+\hline
+$E[X]$ & $35$ & $35$ & $0$\\
+$\mathrm{Var}(X)$ & $10{,}5$ & $10{,}5$ & $0$\\
+$\sigma_X$ & $3{,}24037$ & $3{,}24037$ & $0$\\
+$P(X\ge 20)$ & $0{,}9999971533$ & $0{,}9999971533$ & $\approx 0$\\
+$P(30<X<43)$ & $0{,}9079331984$ & $0{,}9079331984$ & $\approx 0$\\
+$P(X=31)$ & $0{,}0557572778$ & $0{,}0557572778$ & $\approx 0$\\
+\hline
+\end{tabular}
+\end{center}
+
+Esses resultados confirmam  os cálculos analíticos apreapresentados (ver \Cref{fig:q2-check-momentos}), permitindo quantificar a probabilidade de ocorrência de diferentes intervalos e valores específicos do número de clientes que pedem sobremesa em uma amostra de 50 indivíduos.
+
+\subsection{Como a distribuição de $X$ ajuda a reduzir desperdício e evitar falta de produtos}
+
+Uma política simples baseada apenas no valor esperado $E[X]=np$ fornece um ponto de partida (demanda média). No entanto, operar exatamente em $E[X]$ ignora a variabilidade natural da demanda, representada por $\mathrm{Var}(X)=np(1-p)$. Na prática, o restaurante precisa escolher um estoque $s$ (número de sobremesas disponíveis) de modo a controlar a probabilidade de faltar sobremesa.
+
+Considere novamente $X \sim \text{Bin}(n,p)$ como o número de clientes, dentre $n$ observados em um período de interesse, que pedem sobremesa, onde $p$ é a probabilidade de um cliente pedir sobremesa. O uso explícito da distribuição de $X$ permite transformar uma decisão operacional (quantas sobremesas produzir/estocar) em um problema quantitativo de \textbf{gestão de risco}, equilibrando dois custos opostos:
+\begin{itemize}
+    \item \textbf{Desperdício (overstock):} produzir sobremesas demais implica perda por vencimento, armazenamento e custo de insumos.
+    \item \textbf{Falta (stockout):} produzir sobremesas de menos implica perda de vendas, insatisfação de clientes e possível impacto reputacional.
+\end{itemize}
+
+Se o restaurante decide estocar $s$ sobremesas, então ocorrerá \textbf{falta} quando $X>s$. Logo, a probabilidade de falta é:
+\[
+P(\text{falta}) = P(X > s) = 1 - P(X \le s).
+\]
+De forma equivalente, a probabilidade de \textbf{atender toda a demanda} é:
+\[
+P(\text{atender}) = P(X \le s).
+\]
+Assim, o restaurante pode escolher $s$ com base em um \textbf{nível de serviço} desejado. Por exemplo, se a gerência quer atender a demanda em pelo menos 95\% dos dias, escolhe-se $s$ tal que:
+\[
+P(X \le s) \ge 0{,}95.
+\]
+O menor valor inteiro $s$ que satisfaz essa condição é, essencialmente, o \textbf{percentil 95} da distribuição de $X$. Essa abordagem é preferível a estocar apenas $E[X]$, pois incorpora a variabilidade e controla o risco de falta.
+
+Além disso, pode-se quantificar \textbf{desperdício esperado}. Se $s$ é o estoque e $X$ a demanda, o número de sobremesas não vendidas (sobras) é:
+\[
+W = \max(s - X,\,0).
+\]
+Logo, o desperdício esperado é:
+\[
+E[W] = E[\max(s - X,0)] = \sum_{x=0}^{s} (s-x)\,P(X=x).
+\]
+Analogamente, a \textbf{falta esperada} (demanda não atendida) é:
+\[
+L = \max(X - s,\,0),
+\quad
+E[L] = \sum_{x=s+1}^{n} (x-s)\,P(X=x).
+\]
+Essas expressões permitem comparar quantitativamente políticas de estoque diferentes: aumentar $s$ reduz $P(\text{falta})$ e $E[L]$, mas aumenta $E[W]$; diminuir $s$ reduz desperdício, mas aumenta falta. Portanto, a distribuição de $X$ fornece uma base matemática para um equilíbrio racional entre custos, em vez de decisões puramente intuitivas.
+
+\paragraph{Síntese operacional.}
+Ao estimar $p$ (por dados históricos) e definir o horizonte com $n$ clientes, o restaurante pode:
+\begin{itemize}
+    \item escolher $s$ como um percentil (ex.: 90\%, 95\%, 99\%) de $X$ para controlar risco de falta;
+    \item calcular $P(X>s)$ para estimar a probabilidade de ruptura;
+    \item estimar $E[W]$ e $E[L]$ para comparar desperdício esperado e falta esperada;
+    \item ajustar $s$ conforme o custo relativo de falta versus desperdício.
+\end{itemize}
+
+\subsection{Efeitos de mudanças em $p$ e em $n$ na forma e nas probabilidades de $X$}
+
+A distribuição binomial é determinada por dois parâmetros: $n$ e $p$. Mudanças nesses parâmetros afetam diretamente:
+\begin{itemize}
+    \item o centro (média),
+    \item a dispersão (variância/desvio padrão),
+    \item o formato (assimetria e concentração de probabilidades).
+\end{itemize}
+
+\paragraph{Mudança em $p$ (ex.: sobremesa mais popular, $p=0{,}8$).}
+Para $X\sim\text{Bin}(n,p)$:
+\[
+E[X]=np
+\quad \text{e} \quad
+\mathrm{Var}(X)=np(1-p).
+\]
+Assim, mantendo $n=50$:
+\[
+E[X]_{p=0.7}=50\cdot0.7=35
+\quad\longrightarrow\quad
+E[X]_{p=0.8}=50\cdot0.8=40.
+\]
+Ou seja, o centro da distribuição desloca-se para a direita: espera-se mais pedidos de sobremesa.
+
+Quanto à variância:
+\[
+\mathrm{Var}(X)_{p=0.7}=50\cdot0.7\cdot0.3=10.5,
+\]
+\[
+\mathrm{Var}(X)_{p=0.8}=50\cdot0.8\cdot0.2=8.0.
+\]
+Note que, ao aumentar $p$ de 0,7 para 0,8, a variância \textbf{diminui}, pois o termo $p(1-p)$ é máximo em $p=0.5$ e diminui quando $p$ se aproxima de 0 ou 1. Isso significa que a demanda fica mais \textbf{concentrada} ao redor do novo valor esperado. Em termos práticos, o restaurante passa a prever uma demanda maior, mas com menor variabilidade relativa.
+
+\paragraph{Forma (assimetria) ao variar $p$.}
+A distribuição binomial é aproximadamente simétrica quando $p\approx 0.5$. Para $p>0.5$, a distribuição tende a ser levemente assimétrica à esquerda (maior massa de probabilidade em valores altos, com cauda para valores menores). Para $p<0.5$, tende a ser assimétrica à direita. Assim, ao aumentar $p$ de 0,7 para 0,8, a distribuição torna-se ainda mais concentrada em valores altos e com cauda mais pronunciada à esquerda.
+
+\paragraph{Mudança em $n$ (número de clientes observados).}
+Mantendo $p$ fixo, aumentar $n$ aumenta a média e altera a dispersão:
+\[
+E[X]=np \quad \text{cresce linearmente com } n,
+\]
+\[
+\mathrm{Var}(X)=np(1-p) \quad \text{também cresce linearmente com } n.
+\]
+Logo, com mais clientes, o número esperado de sobremesas aumenta, e a variabilidade absoluta também aumenta. Entretanto, um ponto importante é que a \textbf{variabilidade relativa} tende a diminuir, pois o coeficiente de variação (aproximado) é:
+\[
+\text{CV} \approx \frac{\sqrt{np(1-p)}}{np} = \sqrt{\frac{1-p}{np}}.
+\]
+Portanto, conforme $n$ aumenta, $\text{CV}$ diminui, indicando que a demanda torna-se relativamente mais previsível em comparação ao seu tamanho médio.
+
+\paragraph{Implicações nas probabilidades.}
+Alterações em $p$ e $n$ mudam probabilidades de eventos como:
+\[
+P(X \ge k), \quad P(a \le X \le b), \quad P(X=k),
+\]
+pois deslocam e/ou ``apertam'' a distribuição. Em particular:
+\begin{itemize}
+    \item aumentar $p$ desloca a massa de probabilidade para valores maiores de $X$, aumentando $P(X\ge k)$ para $k$ moderados;
+    \item aumentar $n$ aumenta a escala do problema (mais pedidos esperados), e concentra a distribuição relativamente ao redor de $np$, tornando mais útil a análise via percentis e níveis de serviço para dimensionar estoque.
+\end{itemize}
+
+Por fim, podemos concluir que o uso de $X\sim\text{Bin}(n,p)$ permite que decisões de estoque sejam tomadas com base em níveis de risco controláveis (probabilidade de falta) e em medidas quantitativas de desperdício e falta esperados. Mudanças em $p$ e $n$ alteram diretamente a média e a variância de $X$, deslocando a distribuição e modificando a concentração de probabilidades, o que exige ajuste das políticas de estoque para manter o equilíbrio entre desperdício e ruptura de produtos.
+
+
+\section{Premiação Digital}
+
+Plataformas digitais frequentemente utilizam pesquisas online e campanhas de incentivo como estratégias para aumentar engajamento, coletar dados de usuários e estimular a participação em formulários ou questionários. Uma prática comum nesse tipo de ação é a oferta de recompensas a usuários selecionados aleatoriamente dentre um grande volume de visitantes, com o intuito de tornar a participação mais atrativa. 
+
+Do ponto de vista estatístico, esse cenário se torna particularmente interessante porque envolve um número muito grande de tentativas independentes (visitas diárias) e uma probabilidade extremamente pequena de sucesso (ganhar a recompensa) para cada indivíduo. Assim, ainda que a chance individual seja quase nula, o volume de visitantes pode gerar um número não desprezível de vencedores ao longo de um dia, tornando necessário modelar adequadamente a variável aleatória associada ao processo.
+
+Nesta questão, considera-se que um site possui $n = 10^7$ visitantes diários, e que cada visitante, independentemente, tem probabilidade $p = 10^{-7}$ de ganhar a recompensa. Definimos $X$ como a variável aleatória que representa o número total de vencedores em um dia. A partir dessa definição, o problema propõe: (i) identificar uma aproximação simples e apropriada para a função massa de probabilidade de $X$, (ii) comparar estatisticamente os valores esperados e variâncias obtidos pela distribuição exata e pela aproximação, (iii) analisar a probabilidade de um vencedor realmente receber o prêmio quando há concorrência com outros vencedores, e (iv) validar empiricamente, por simulação, a qualidade da aproximação adotada.
+
+A análise deste problema evidencia um caso clássico de modelagem probabilística em larga escala, onde métodos de aproximação tornam-se essenciais para simplificar cálculos e interpretar fenômenos raros em sistemas com alto volume de observações.
+
+Utilizaremos como base de todos os códigos de validação a seguinte definição em R:
+\begin{lstlisting}
+# Parâmetros
+n <- 1e7
+p <- 1e-7
+lambda <- n * p  # = 1
+
+cat("n =", n, "\n")
+cat("p =", p, "\n")
+cat("lambda = n*p =", lambda, "\n\n")
+\end{lstlisting}
+
+\subsection{Aproximação para a PMF de $X$ e Justificativa}
+
+Seja $X$ o número de vencedores em um dia. Como cada um dos $n = 10^7$ visitantes diários possui, de forma independente, probabilidade $p = 10^{-7}$ de ganhar a recompensa, o modelo \textbf{exato} para $X$ é binomial:
+\[
+X \sim \text{Bin}(n=10^7,\;p=10^{-7}).
+\]
+
+Entretanto, trabalhar diretamente com a PMF binomial torna-se pouco prático para valores tão grandes de $n$. Além disso, este problema se enquadra em um caso clássico de \textbf{eventos raros}, pois $p$ é extremamente pequeno, enquanto $n$ é extremamente grande. Nessas condições, a distribuição binomial admite uma aproximação simples e bastante precisa pela distribuição de Poisson.
+
+A aproximação de Poisson é adequada quando:
+\begin{itemize}
+    \item $n$ é grande,
+    \item $p$ é pequeno,
+    \item $\lambda = np$ é de ordem moderada (fixo).
+\end{itemize}
+
+Calculando o parâmetro:
+\[
+\lambda = np = 10^7 \cdot 10^{-7} = 1.
+\]
+
+Logo, uma aproximação simples e adequada é:
+\[
+X \approx \text{Pois}(\lambda=1).
+\]
+
+Assim, a \textbf{função massa de probabilidade aproximada} é:
+\[
+P(X = k) \approx \frac{e^{-\lambda}\lambda^k}{k!}
+= \frac{e^{-1}\,1^k}{k!}
+= \frac{e^{-1}}{k!},
+\quad k = 0,1,2,\dots
+\]
+
+\subsubsection*{Justificativa Matemática da Aproximação}
+
+A PMF exata da binomial é:
+\[
+P(X=k) = \binom{n}{k}p^k(1-p)^{n-k}.
+\]
+
+Quando $n \to \infty$ e $p \to 0$ de modo que $np=\lambda$ permaneça constante, vale o limite clássico:
+\[
+\binom{n}{k}p^k(1-p)^{n-k}
+\longrightarrow
+\frac{e^{-\lambda}\lambda^k}{k!},
+\]
+que corresponde exatamente à PMF de uma variável Poisson$(\lambda)$.
+
+Como neste problema temos $n$ extremamente grande, $p$ extremamente pequeno, e $\lambda=np=1$ fixo e moderado, conclui-se que a aproximação por Poisson é válida para simplificar o cálculo de probabilidades e a análise do número diário de vencedores, ainda que, evidentemente, tenhamos X como uma distribuição binomial.
+
+
+\subsection{Valor Esperado e Variância: Distribuição Exata vs. Aproximada}
+
+Pelo enunciado, o número de vencedores em um dia é modelado exatamente por uma distribuição binomial:
+\[
+X \sim \text{Bin}(n=10^7,\;p=10^{-7}).
+\]
+No Item 1, argumentou-se que, devido ao regime de \textit{eventos raros} (isto é, $n$ muito grande e $p$ muito pequeno), uma aproximação adequada é:
+\[
+X \approx \text{Pois}(\lambda), \quad \lambda = np.
+\]
+Como $np = 10^7\cdot 10^{-7} = 1$, a aproximação é:
+\[
+X \approx \text{Pois}(1).
+\]
+
+A seguir, calculamos $E[X]$ e $\mathrm{Var}(X)$ sob as duas distribuições e comparamos os resultados.
+
+\subsubsection*{Distribuição Exata: Binomial}
+
+Para $X\sim\text{Bin}(n,p)$, valem as fórmulas:
+\[
+E[X] = np,
+\qquad
+\mathrm{Var}(X) = np(1-p).
+\]
+
+Substituindo $n=10^7$ e $p=10^{-7}$:
+\[
+E[X]_{\text{exato}} = np = 10^7\cdot 10^{-7} = 1.
+\]
+
+\[
+\mathrm{Var}(X)_{\text{exato}} = np(1-p) = 1\cdot(1-10^{-7}) = 0{,}9999999.
+\]
+
+\subsubsection*{Distribuição Aproximada: Poisson}
+
+Para uma variável aleatória $Y\sim\text{Pois}(\lambda)$, temos:
+\[
+E[Y] = \lambda,
+\qquad
+\mathrm{Var}(Y) = \lambda.
+\]
+
+Como $\lambda = np = 1$:
+\[
+E[X]_{\text{aprox}} = 1,
+\qquad
+\mathrm{Var}(X)_{\text{aprox}} = 1.
+\]
+
+\subsubsection*{Comparação e Comentário}
+
+Observa-se que o valor esperado é \textbf{idêntico} nas duas abordagens:
+\[
+E[X]_{\text{exato}} = E[X]_{\text{aprox}} = 1.
+\]
+
+Já a variância difere apenas por um termo extremamente pequeno:
+\[
+\mathrm{Var}(X)_{\text{exato}} = 0{,}9999999
+\quad \text{e} \quad
+\mathrm{Var}(X)_{\text{aprox}} = 1.
+\]
+
+A diferença absoluta é:
+\[
+|\mathrm{Var}(X)_{\text{aprox}} - \mathrm{Var}(X)_{\text{exato}}|
+= 1 - 0{,}9999999 = 10^{-7}.
+\]
+
+Em termos relativos, isso representa uma discrepância da ordem de $10^{-7}$, isto é, de certa forma, desprezível, para fins de modelagem e tomada de decisão. Essa aproximação convergente ocorre pois, quando $p$ é muito pequeno, o fator $(1-p)$ é extremamente próximo de 1, fazendo com que:
+\[
+np(1-p) \approx np = \lambda.
+\]
+Portanto, neste âmbito de análise, a aproximação de Poisson não apenas simplifica cálculos, como também preserva com alta fidelidade as principais medidas teóricas de posição e dispersão.
+
+Para a validação dos cálculos manuais, foi utilizado o seguinte script em R:
+\begin{lstlisting}
+EX_bin <- n * p
+Var_bin <- n * p * (1 - p)
+
+EX_pois <- lambda
+Var_pois <- lambda
+
+cat("=== BINOMIAL (EXATO) ===\n")
+cat("E[X] =", EX_bin, "\n")
+cat("Var(X) =", Var_bin, "\n\n")
+
+cat("=== POISSON (APROX) ===\n")
+cat("E[X] =", EX_pois, "\n")
+cat("Var(X) =", Var_pois, "\n\n")
+
+cat("=== DIFERENÇAS ===\n")
+cat("|Var_pois - Var_bin| =", abs(Var_pois - Var_bin), "\n")
+cat("Diferença relativa na variância =", abs(Var_pois - Var_bin) / Var_pois, "\n\n")
+\end{lstlisting}
+
+Obentendo o seguinte resultado:
+\begin{figure}[htbp]
+    \centering
+    \fbox{\includegraphics[width=1.00\linewidth]{imagens/expectandvar.png}}
+    \caption{Saída do R para \(E[X]\) e \(\Var(X)\) na Binomial exata e na aproximação de Poisson (\(\lambda=1\)).}
+    \label{fig:q2-saida-momentos}
+\end{figure}
+
+Para efeitos de comparação, podemos por os resultados analíticos e teóricos em uma tabela:
+
+\begin{center}
+\begin{tabular}{lccc}
+\hline
+\textbf{Medida} & \textbf{Binomial (exata)} & \textbf{Poisson (aprox.)} & \textbf{Dif. abs.}\\
+\hline
+$E[X]$ & $1$ & $1$ & $0$\\
+$\mathrm{Var}(X)$ & $0{,}9999999$ & $1$ & $10^{-7}$\\
+\hline
+\end{tabular}
+\end{center}
+
+\newpage
+
+\subsection{Probabilidade de Receber o Prêmio na Presença de Outros Vencedores}
+
+Mesmo que o usuário em questão tenha sido selecionado como vencedor, pode haver outros vencedores no mesmo dia. O enunciado define $W \sim \text{Pois}(1)$ como o número de vencedores \emph{além} do usuário. Assim, o número total de vencedores é $W+1$. Quando há múltiplos vencedores, o prêmio é sorteado uniformemente entre todos os vencedores; logo, a probabilidade condicional de o usuário receber o prêmio, dado $W=w$, é:
+\[
+P(\text{receber o prêmio}\mid W=w)=\frac{P(\text{receber o prêmio}\cap W= w)}{P(W = w)}.
+\]
+
+Chamemos $A = \text{receber o prêmio}$, para que possamos reduzir à equação:
+\[
+P(A\mid W=w)=\frac{P(A\cap W= w)}{P(W = w)}.
+\]
+Assim, podemos interpretar que $P(A\cap W= w) \equiv P(A \mid W=w)P(W=w)$ usando a Regra de Bayes. Com isso, podemos afirmar, que:
+\[
+P(\text{receber o prêmio} \mid W=w)=\frac{1}{w+1}.
+\]
+
+Portanto, a probabilidade incondicional de realmente receber o prêmio é a esperança (expectation):
+\[  
+P(\text{receber o prêmio})=\mathbb{E}\!\left[\frac{1}{W+1}\right]
+=\sum_{w=0}^{\infty}\frac{1}{w+1}\,P(W=w).
+\]
+
+Como $W\sim\text{Pois}(1)$, tem-se $P(W=w)=e^{-1}\frac{1^w}{w!}=e^{-1}\frac{1}{w!}$. Substituindo:
+\[
+P(\text{receber o prêmio})
+=\sum_{w=0}^{\infty}\frac{1}{w+1}\,e^{-1}\frac{1}{w!}
+=e^{-1}\sum_{w=0}^{\infty}\frac{1}{(w+1)w!}.
+\]
+
+Observa-se que $(w+1)w!=(w+1)!$, logo:
+\[
+P(\text{receber o prêmio})
+=e^{-1}\sum_{w=0}^{\infty}\frac{1}{(w+1)!}.
+\]
+
+Fazendo a mudança de índice $j=w+1$ (assim $j=1,2,3,\dots$):
+\[
+P(\text{receber o prêmio})
+=e^{-1}\sum_{j=1}^{\infty}\frac{1}{j!}.
+\]
+
+Por fim, utiliza-se a expansão conhecida $e=\sum_{j=0}^{\infty}\frac{1}{j!}$, de modo que
+\[
+\sum_{j=1}^{\infty}\frac{1}{j!}=e-1.
+\]
+Assim,
+\[
+P(\text{receber o prêmio})
+=e^{-1}(e-1)=1-e^{-1}.
+\]
+
+Numericamente,
+\[
+P(\text{receber o prêmio})=1-e^{-1}\approx 1-0{,}3679=0{,}6321.
+\]
+
+Conclui-se que, mesmo sendo um dos vencedores, a probabilidade de de fato receber o prêmio (quando o sorteio é uniforme entre todos os vencedores) é aproximadamente $0{,}6321$, ou seja, cerca de $63{,}2\%$.
+
+Para a validação dos cálculos manuais, usamos o seguinte script em R:
+\begin{lstlisting}
+p_teorico <- 1 - exp(-lambda)
+cat("\n=== ITEM 2.3 ===\n")
+cat("Valor teórico: 1 - exp(-1) =", p_teorico, "\n")
+
+# Soma truncada
+Wmax <- 60
+w <- 0:Wmax
+p_soma <- sum((1 / (w + 1)) * dpois(w, lambda = lambda))
+tail_prob <- 1 - ppois(Wmax, lambda = lambda)
+
+cat("Aproximação por soma (0..", Wmax, ") =", p_soma, "\n", sep="")
+cat("Massa na cauda ignorada P(W>", Wmax, ") =", tail_prob, "\n", sep="")
+
+# Simulação
+B <- 5e5
+W <- rpois(B, lambda = lambda)
+p_sim <- mean(1 / (W + 1))
+
+cat("Estimativa por simulação =", p_sim, "\n")
+cat("Erro absoluto vs teórico =", abs(p_sim - p_teorico), "\n\n")
+\end{lstlisting}
+
+Obtendo, assim, os seguintes resultados:
+\begin{figure}[htbp]
+    \centering
+    \fbox{\includegraphics[width=0.90\linewidth]{image.png}}
+    \caption{Saída do R validando \(P(\text{receber o prêmio}) = 1-e^{-1}\) via cálculo direto, soma truncada e simulação.}
+    \label{fig:q2-saida-premio}
+\end{figure}
+
+
+\subsection{Simulação e Comparação Visual: Binomial vs. Poisson}
+
+Podemos obter os gráficos a partir da seguinte programação:
+
+\begin{lstlisting}
+set.seed(42)
+
+# Parametros do problema
+n <- 1e7
+p <- 1e-7
+lambda <- n * p  # = 1
+
+# Numero de "dias" simulados
+B <- 200000  # pode aumentar se quiser (ex.: 1e6)
+
+# Simulacoes
+x_bin  <- rbinom(B, size = n, prob = p)        # modelo exato
+x_pois <- rpois(B, lambda = lambda)            # aproximacao
+
+# ---- Comparacao visual (histogramas) ----
+# Para lambda=1, os valores ficam concentrados em poucos inteiros (0,1,2,3,...)
+max_k <- max(quantile(c(x_bin, x_pois), 0.999), 10)
+breaks_int <- seq(-0.5, max_k + 0.5, by = 1)
+
+par(mfrow = c(1, 2))
+
+hist(
+  x_bin, breaks = breaks_int, freq = FALSE,
+  main = "Binomial (exata)",
+  xlab = "Número de vencedores (X)",
+  ylab = "Densidade"
+)
+# PMF teorica binomial nos inteiros
+k <- 0:max_k
+points(k, dbinom(k, size = n, prob = p), pch = 16)
+
+hist(
+  x_pois, breaks = breaks_int, freq = FALSE,
+  main = "Poisson (aprox.)",
+  xlab = "Número de vencedores (X)",
+  ylab = "Densidade"
+)
+# PMF teorica Poisson nos inteiros
+points(k, dpois(k, lambda = lambda), pch = 16)
+
+par(mfrow = c(1, 1))
+
+# ---- Comparacao direta (lado a lado por k) ----
+# Frequencias empiricas
+tab_bin  <- table(factor(x_bin, levels = k))
+tab_pois <- table(factor(x_pois, levels = k))
+
+emp_bin  <- as.numeric(tab_bin)  / B
+emp_pois <- as.numeric(tab_pois) / B
+
+# Probabilidades teoricas
+th_bin  <- dbinom(k, size = n, prob = p)
+th_pois <- dpois(k, lambda = lambda)
+
+# Grafico comparando empirico vs teorico (em um so)
+plot(
+  k, emp_bin, type = "b", pch = 16,
+  xlab = "k",
+  ylab = "Probabilidade",
+  main = "Comparacao: Empirico vs Teorico"
+)
+lines(k, th_bin, type = "b", pch = 1, lty = 2)
+lines(k, emp_pois, type = "b", pch = 17)
+lines(k, th_pois, type = "b", pch = 2, lty = 2)
+
+legend(
+  "topright",
+  legend = c("Empirico Binomial", "Teorico Binomial", "Empirico Poisson", "Teorico Poisson"),
+  pch = c(16, 1, 17, 2),
+  lty = c(1, 2, 1, 2),
+  bty = "n"
+)
+
+\end{lstlisting}
+
+E observá-los nos plots: 
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.00\linewidth]{imagens/q2i4l1.png}
+    \caption{Comparação empírica: histogramas (em densidade) para \(X\) sob Binomial exata e Poisson aproximada (\(\lambda=1\)).}
+    \label{fig:q2-hist-comp}
+\end{figure}
+
+
+\newpage
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.00\linewidth]{imagens/q2i4l2.png}
+    \caption{Comparação por valores inteiros \(k\): frequências empíricas \(\widehat{P}(X=k)\) versus PMFs teóricas para Binomial e Poisson.}
+    \label{fig:q2-pmf-comp}
+\end{figure}
+
+
+Para avaliar empiricamente a qualidade da aproximação de Poisson do Item 1, foram realizadas $B$ simulações independentes do número diário de vencedores $X$ sob dois modelos: o modelo exato binomial ($X\sim\mathrm{Bin}(10^7,10^{-7})$) e o modelo aproximado de Poisson ($X\sim\mathrm{Pois}(\lambda)$ com $\lambda=np=1$). A comparação visual foi feita por meio de histogramas em escala de densidade (com classes centradas em inteiros) e pela comparação direta das probabilidades por valor $k$, isto é, das frequências relativas empíricas $\widehat{P}(X=k)$ com as probabilidades teóricas $P(X=k)$.
+
+As visualizações indicam forte concordância entre os resultados empíricos e as PMFs teóricas, com a massa de probabilidade concentrada em pequenos valores inteiros (principalmente $k=0,1,2,3$), como esperado quando $\lambda=1$. Além disso, as distribuições geradas pelos dois modelos são praticamente indistinguíveis na região de maior probabilidade, sugerindo que o erro introduzido pela aproximação é desprezível do ponto de vista prático. Pequenas discrepâncias podem ocorrer apenas nas caudas (valores de $k$ pouco prováveis), o que é compatível com a variabilidade amostral finita. Assim, a simulação confirma que a aproximação por Poisson é adequada para descrever o número diário de vencedores neste regime de eventos raros.
+
+
+\section{Monitorando CPU}
+
+\subsection{Geração de valores normais via Transformação de Box--Muller}
+
+Nesta etapa, o objetivo é gerar amostras da temperatura de uma CPU assumindo regime estacionário
+\[
+T \sim \mathcal{N}(\mu=62,\;\sigma=3{,}5),
+\]
+a partir de variáveis aleatórias uniformes independentes, utilizando a transformação de Box--Muller.
+
+\subsubsection*{Conversão para a distribuição de temperatura da CPU}
+
+Para transformar uma normal padrão $Z\sim\mathcal{N}(0,1)$ em uma normal com média $\mu$ e desvio-padrão $\sigma$,
+utiliza-se a transformação linear:
+\[
+T = \mu + \sigma Z.
+\]
+
+Como $\mu=62$ e $\sigma=3{,}5$, cada valor gerado é convertido por:
+\[
+T = 62 + 3{,}5\,Z.
+\]
+Em particular, para os dois valores do item (b):
+\[
+T_1 = 62 + 3{,}5\,Z_1,
+\qquad
+T_2 = 62 + 3{,}5\,Z_2,
+\]
+produzindo amostras compatíveis com $\mathcal{N}(62,\,3{,}5^2)$.
+
+\subsubsection*{Implementação em \texttt{R}}
+
+O código abaixo implementa a geração de $n$ valores normais via Box--Muller e, opcionalmente,
+já retorna a variável na escala desejada (por padrão, $\mu=0$ e $\sigma=1$).
+
+\begin{lstlisting}
+box_muller_norm <- function(n, mu = 0, sigma = 1) {
+  m <- ceiling(n / 2)
+
+  u1 <- runif(m)
+  u1[u1 == 0] <- .Machine$double.eps  # evita log(0)
+  u2 <- runif(m)
+
+  r <- sqrt(-2 * log(u1))
+  theta <- 2 * pi * u2
+
+  z1 <- r * cos(theta)
+  z2 <- r * sin(theta)
+
+  z <- c(z1, z2)[1:n]
+  mu + sigma * z
+}
+
+\end{lstlisting}
+
+
+\subsection{Geração de 1.000 medições de temperatura: Box--Muller vs. gerador normal do \texttt{R}}
+
+Em seguida, foram gerados $1000$ valores utilizando o gerador normal embutido do \texttt{R} (função \texttt{rnorm}), e utilizando o Box-Muller criado, com os mesmos parâmetros de média e desvio-padrão, com o objetivo de comparar os dois métodos de geração.
+
+\subsubsection*{Implementação em \texttt{R}}
+
+O trecho de código a seguir gera as duas amostras, cada uma com 1.000 observações:
+
+\begin{lstlisting}
+set.seed(42)
+
+# 1) 1.000 temperaturas via Box-Muller (funcao do item 1)
+temp_bm <- box_muller_norm(1000, mu = 62, sigma = 3.5)
+
+# 2) 1.000 temperaturas via gerador normal embutido do R
+temp_rnorm <- rnorm(1000, mean = 62, sd = 3.5)
+\end{lstlisting}
+
+
+\subsection{Estatísticas descritivas e probabilidades: duas amostras simuladas}
+
+Foram considerados dois conjuntos de dados simulados com $n=1000$ observações cada:
+(i) temperaturas geradas via Box--Muller (\texttt{temp\_bm}) e (ii) temperaturas geradas pelo gerador normal embutido do \texttt{R} (\texttt{temp\_rnorm}).
+Para cada conjunto, foram calculados: média e desvio padrão amostrais.
+
+
+\subsection*{a) Média amostral em R:}
+
+\begin{lstlisting}
+# Media amostral
+# =========================
+# Box-Muller
+media_bm <- mean(temp_bm)
+
+# rnorm
+media_rnorm <- mean(temp_rnorm)
+
+media_bm
+media_rnorm
+\end{lstlisting}
+
+Os valores podem ser observados no "environment" do Rstudio após o cálculo feito no código supracitado:
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.00\linewidth]{imagens/q3i3lA.png}
+    \caption{Saída do R para as médias amostrais: Box--Muller e \texttt{rnorm}.}
+    \label{fig:q3-media}
+\end{figure}
+
+
+As médias amostrais estimadas foram $\bar{T}_{\text{BM}} \approx 62{,}07^\circ$C (Box--Muller) e $\bar{T}_{\text{R}} \approx 61{,}89^\circ$C (\texttt{rnorm}). Ambas estão próximas, e a diferença entre elas (cerca de $0{,}18^\circ$C) é compatível com a variabilidade amostral esperada para $n=1000$, indicando, a priori, que os dois métodos reproduzem adequadamente o comportamento médio da distribuição.
+
+
+\subsection*{b) Desvio-padrão amostral em R:}
+
+\begin{lstlisting}
+# Desvio-padrao amostral
+# =========================
+
+# Box-Muller
+sd_bm <- sd(temp_bm)
+
+# rnorm
+sd_rnorm <- sd(temp_rnorm)
+
+sd_bm
+sd_rnorm
+\end{lstlisting}
+
+Da mesma forma que no item anterior, podemos observar o resultado do cálculos de desvio-padrão no mesmo environment:
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.00\linewidth]{imagens/q3i3lB.png}
+    \caption{Saída do R para os desvios-padrão amostrais: Box--Muller e \texttt{rnorm}.}
+    \label{fig:q3-sd}
+\end{figure}
+
+Os desvios-padrão amostrais obtidos foram $s_{\text{BM}} \approx 3{,}60^\circ$C (Box--Muller) e $s_{\text{R}} \approx 3{,}50^\circ$C (\texttt{rnorm}). Ambos os valores estão muito próximos, indicando que as duas amostras reproduzem adequadamente a dispersão esperada. A pequena diferença observada é compatível com a variabilidade amostral para $n=1000$.
+
+
+\subsection*{c) Mínimos e Máximos amostrais em R:}
+Utilizando essas linhas de códigos no que já programamos em R, obtemos as temperaturas mínima e máxima das amostras:
+
+\begin{lstlisting}
+# Temperatura minima e maxima observada
+# =========================
+
+# Box-Muller
+min_bm <- min(temp_bm)
+max_bm <- max(temp_bm)
+
+# rnorm
+min_rnorm <- min(temp_rnorm)
+max_rnorm <- max(temp_rnorm)
+
+min_bm; max_bm
+min_rnorm; max_rnorm
+\end{lstlisting}
+
+Então, observamos os resultados:
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.00\linewidth]{imagens/q3i3lC.png}
+    \caption{Saída do R para mínimos e máximos observados nas amostras: Box--Muller e \texttt{rnorm}.}
+    \label{fig:q3-extremos}
+\end{figure}
+\newpage
+
+Quanto aos extremos observados, obteve-se $T_{\min,\text{BM}} \approx 49{,}64^\circ$C e $T_{\max,\text{BM}} \approx 72{,}97^\circ$C para a amostra gerada por Box--Muller, enquanto para \texttt{rnorm} obteve-se $T_{\min,\text{R}} \approx 50{,}20^\circ$C e $T_{\max,\text{R}} \approx 74{,}23^\circ$C. As diferenças entre os extremos nas duas amostras decorrem de flutuações aleatórias e não indicam divergência sistemática entre os métodos de geração.
+
+\subsection*{d) Probabilidade empírica e teórica  P(T > 68): }
+Conseguimos calcular a probabildiade empírica a partir do seguinte código:
+
+\begin{lstlisting}
+# Probabilidade empirica P(T > 68)
+# =========================
+
+# Box-Muller
+p_emp_bm_gt68 <- mean(temp_bm > 68)
+
+# rnorm
+p_emp_rnorm_gt68 <- mean(temp_rnorm > 68)
+
+p_emp_bm_gt68
+p_emp_rnorm_gt68
+\end{lstlisting}
+
+E observá-lo no environment: 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.00\linewidth]{imagens/q3i3lD.png}
+    \caption{Saída do R para as estimativas empíricas de \(P(T>68)\) nas duas amostras simuladas.}
+    \label{fig:q3-prob-gt68}
+\end{figure}
+
+Agora, para obter a P(T > 68), assumindo $T \sim \mathcal{N}(62,\,3{,}5^2)$, padroniza-se:
+\[
+P(T>68)=P\!\left(\frac{T-62}{3{,}5}>\frac{68-62}{3{,}5}\right)
+= P\!\left(Z>\frac{6}{3{,}5}\right),
+\quad Z\sim\mathcal{N}(0,1).
+\]
+Logo,
+\[
+P(T>68)=1-\Phi\!\left(\frac{6}{3{,}5}\right)
+=1-\Phi(1{,}7143)
+\approx 0{,}04324.
+\]
+
+Nas simulações com $n=1000$, obteve-se $\widehat{P}_{\text{BM}}(T>68)=0{,}052$ (Box--Muller) e
+$\widehat{P}_{\text{R}}(T>68)=0{,}034$ (\texttt{rnorm}). Ambos os valores estão próximos da probabilidade teórica
+($\approx 0{,}043$) e as diferenças observadas são compatíveis com a variabilidade amostral esperada para uma amostra finita.
+
+\newpage
+
+
+\subsection*{e) Probabilidade empírica e teórica  P(60 < T < 65): }
+Novamente, calculamos a probabildiade empírica a partir do seguinte código:
+
+\begin{lstlisting}
+# Probabilidade empirica P(60 < T < 65)
+# =========================
+
+# Box-Muller
+p_emp_bm_60_65 <- mean(temp_bm > 60 & temp_bm < 65)
+
+# rnorm
+p_emp_rnorm_60_65 <- mean(temp_rnorm > 60 & temp_rnorm < 65)
+
+p_emp_bm_60_65
+p_emp_rnorm_60_65
+\end{lstlisting}
+
+E observá-lo no environment: 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.00\linewidth]{imagens/q3i3lE.png}
+    \caption{Saída do R para as estimativas empíricas de \(P(60<T<65)\) nas duas amostras simuladas.}
+    \label{fig:q3-prob-60-65}
+\end{figure}
+
+
+Assumindo $T \sim \mathcal{N}(62,\,3{,}5^2)$, temos:
+\[
+P(60<T<65)
+= P\!\left(\frac{60-62}{3{,}5}<\frac{T-62}{3{,}5}<\frac{65-62}{3{,}5}\right)
+= P\!\left(\frac{-2}{3{,}5}<Z<\frac{3}{3{,}5}\right),
+\quad Z\sim\mathcal{N}(0,1).
+\]
+Logo,
+\[
+P(60<T<65)
+= \Phi\!\left(\frac{3}{3{,}5}\right) - \Phi\!\left(\frac{-2}{3{,}5}\right)
+= \Phi(0{,}8571) - \Phi(-0{,}5714).
+\]
+Usando valores tabelados (ou computacionais) da CDF normal padrão,
+\[
+\Phi(0{,}8571)\approx 0{,}80427,
+\qquad
+\Phi(-0{,}5714)\approx 0{,}28385,
+\]
+de modo que
+\[
+P(60<T<65)\approx 0{,}80427-0{,}28385 = 0{,}52042 \approx 0{,}520.
+\]
+
+Nas simulações com $n=1000$, obteve-se $\widehat{P}_{\text{BM}}(60<T<65)=0{,}513$ (Box--Muller) e
+$\widehat{P}_{\text{R}}(60<T<65)=0{,}520$ (\texttt{rnorm}). Ambos os valores são consistentes com a probabilidade teórica
+($\approx 0{,}520$), com diferenças pequenas atribuíveis à variabilidade amostral.
+
+\subsection*{f) Probabilidade teórica  P(T > 75) e explicações: }
+
+Assumindo $T \sim \mathcal{N}(62,\,3{,}5^2)$, calcula-se a probabilidade teórica de exceder $75^\circ$C por padronização. Define-se
+\[
+Z=\frac{T-\mu}{\sigma}=\frac{T-62}{3{,}5}\sim\mathcal{N}(0,1).
+\]
+Logo,
+\[
+P(T>75)=P\!\left(\frac{T-62}{3{,}5}>\frac{75-62}{3{,}5}\right)
+= P\!\left(Z>\frac{13}{3{,}5}\right).
+\]
+Calculando o valor do \textit{z-score}:
+\[
+\frac{13}{3{,}5}=3{,}7142857\approx 3{,}7143.
+\]
+Assim,
+\[
+P(T>75)=1-\Phi(3{,}7143).
+\]
+Usando tabela/CDF computacional da normal padrão:
+\[
+\Phi(3{,}7143)\approx 0{,}9998981
+\quad\Longrightarrow\quad
+P(T>75)\approx 1-0{,}9998981 = 0{,}0001019 \approx 1{,}02\times 10^{-4}.
+\]
+
+\subsection*{Por que é difícil observar esse evento em $n=1000$ amostras?}
+
+Considere o indicador $I_i=\mathbf{1}\{T_i>75\}$ para a $i$-ésima medição. Sob independência, tem-se
+\[
+I_i \sim \text{Bernoulli}(p),
+\quad \text{com } p=P(T>75)\approx 1{,}02\times 10^{-4}.
+\]
+O número total de ocorrências acima de $75^\circ$C em $n$ medições é
+\[
+N=\sum_{i=1}^{n} I_i \sim \text{Bin}(n,p).
+\]
+Portanto, o número \emph{esperado} de ocorrências é
+\[
+\mathbb{E}[N]=np \approx 1000\times 1{,}02\times 10^{-4} \approx 0{,}102.
+\]
+Como $\mathbb{E}[N]\ll 1$, a expectativa é observar \emph{bem menos que uma ocorrência} em 1000 medições, isto é, na maioria das amostras não aparecerá nenhum valor acima de $75^\circ$C.
+
+\paragraph{Probabilidade de aparecer pelo menos uma ocorrência.}
+A probabilidade de não ocorrer nenhuma vez (isto é, $N=0$) é:
+\[
+P(N=0)=(1-p)^n.
+\]
+Com $n=1000$ e $p\approx 0{,}0001019$:
+\[
+P(N=0)=(1-0{,}0001019)^{1000}.
+\]
+Uma aproximação padrão para $p$ pequeno usa $\ln(1-p)\approx -p$, resultando em
+\[
+(1-p)^{1000}=\exp\!\big(1000\ln(1-p)\big)\approx \exp(-1000p)=e^{-0{,}102}\approx 0{,}903.
+\]
+Assim, a probabilidade de observar \emph{pelo menos uma} medição acima de $75^\circ$C é
+\[
+P(N\ge 1)=1-P(N=0)\approx 1-0{,}903 = 0{,}097,
+\]
+mostrando que há apenas cerca de $9{,}7\%$ de chance de ver esse evento em 1000 amostras.
+
+\paragraph{Tamanho amostral necessário para observar o evento com maior frequência.}
+Se o objetivo for ter, por exemplo, $50\%$ de chance de observar ao menos uma ocorrência, impõe-se
+\[
+P(N\ge 1)=1-(1-p)^n \ge 0{,}5
+\quad\Longleftrightarrow\quad
+(1-p)^n \le 0{,}5.
+\]
+Usando novamente a aproximação $(1-p)^n\approx e^{-np}$:
+\[
+e^{-np}\le 0{,}5
+\quad\Longleftrightarrow\quad
+np \ge \ln 2
+\quad\Longleftrightarrow\quad
+n \ge \frac{\ln 2}{p}.
+\]
+Com $p\approx 1{,}02\times 10^{-4}$:
+\[
+n \gtrsim \frac{0{,}6931}{1{,}02\times 10^{-4}} \approx 6{,}8\times 10^{3}.
+\]
+Logo, seriam necessárias em torno de $6{,}800$ medições para que a chance de observar ao menos um valor acima de $75^\circ$C seja aproximadamente $50\%$, o que reforça que se trata de um evento raro e que amostras pequenas (como $n=1000$) tendem a não capturá-lo.
+
+
+\subsection{Visualizando resultados}
+
+\subsection*{a) Um histograma das temperaturas simuladas da CPU: }
+
+Podemos obter os histogramas a partir da seguinte programação:
+
+\begin{lstlisting}
+#Histograma das temperaturas simuladas (separados)
+# =========================
+
+par(mfrow = c(1, 2))
+
+# Box-Muller
+hist(
+  temp_bm,
+  breaks = 30,
+  main = "Temperaturas (Box-Muller)",
+  xlab = "Temperatura (C)",
+  ylab = "Frequencia"
+)
+
+# rnorm
+hist(
+  temp_rnorm,
+  breaks = 30,
+  main = "Temperaturas (rnorm)",
+  xlab = "Temperatura (C)",
+  ylab = "Frequencia"
+)
+
+par(mfrow = c(1, 1))
+\end{lstlisting}
+
+E observá-los nos plots: 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.00\linewidth]{imagens/q3i4lA.png}
+    \caption{Histogramas das temperaturas simuladas: Box--Muller (à esquerda) e \texttt{rnorm} (à direita).}
+    \label{fig:q3-hist}
+\end{figure}
+
+
+
+\subsection*{b) A função densidade de probabilidade (PDF) normal teórica (média 62 ◦C, desvio padrão 3.5 ◦C) sobreposta ao histograma }
+
+Denovo, podemos obter as PDF's a partir da seguinte programação:
+
+\begin{lstlisting}
+# Questao 3 - Item 4 (b): PDF normal teorica sobreposta ao histograma
+# =========================
+
+# Parametros teoricos
+mu <- 62
+sigma <- 3.5
+
+# Box-Muller: hist + PDF
+hist(
+  temp_bm,
+  breaks = 30,
+  freq = FALSE,  # densidade
+  main = "Box-Muller: histograma + PDF teorica",
+  xlab = "Temperatura (C)",
+  ylab = "Densidade"
+)
+curve(
+  dnorm(x, mean = mu, sd = sigma),
+  add = TRUE,
+  lwd = 2
+)
+
+# rnorm: hist + PDF
+hist(
+  temp_rnorm,
+  breaks = 30,
+  freq = FALSE,  # densidade
+  main = "rnorm: histograma + PDF teorica",
+  xlab = "Temperatura (C)",
+  ylab = "Densidade"
+)
+curve(
+  dnorm(x, mean = mu, sd = sigma),
+  add = TRUE,
+  lwd = 2
+)
+\end{lstlisting}
+
+E observá-las nos plots: 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth]{imagens/q3i4lB.png}
+    \caption{Box--Muller: histograma em densidade com PDF teórica de \(\mathcal{N}(62,\,3{,}5^2)\) sobreposta.}
+    \label{fig:q3-pdf-bm}
+\end{figure}
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth]{imagens/q3i4lB2.png}
+    \caption{\texttt{rnorm}: histograma em densidade com PDF teórica de \(\mathcal{N}(62,\,3{,}5^2)\) sobreposta.}
+    \label{fig:q3-pdf-rnorm}
+\end{figure}
+
+
+\subsection{Discussão de resultados: }
+As distribuições empíricas das temperaturas simuladas apresentam formato aproximadamente simétrico e unimodal, e os histogramas obtidos (com a PDF teórica sobreposta) indicam boa aderência ao comportamento esperado de uma distribuição normal $\mathcal{N}(62,\,3{,}5^2)$. A curva teórica se ajusta de forma consistente ao centro e às caudas dos histogramas, com pequenas discrepâncias locais atribuíveis ao tamanho amostral finito ($n=1000$) e à discretização inerente ao particionamento em classes.
+
+Em relação às medidas de tendência central e dispersão, as médias amostrais estimadas foram próximas do valor esperado $\mu=62^\circ$C: $\bar{T}_{\text{BM}}\approx 62{,}07^\circ$C (Box--Muller) e $\bar{T}_{\text{R}}\approx 61{,}89^\circ$C (\texttt{rnorm}). De forma análoga, os desvios-padrão amostrais ficaram próximos de $\sigma=3{,}5^\circ$C: $s_{\text{BM}}\approx 3{,}60^\circ$C e $s_{\text{R}}\approx 3{,}50^\circ$C. As diferenças observadas entre valores empíricos e teóricos, bem como entre os dois métodos de geração, são compatíveis com flutuações aleatórias esperadas em amostras de tamanho $1000$ e não sugerem viés sistemático.
+
+Não foram identificadas diferenças perceptíveis relevantes entre o conjunto gerado via Box--Muller e o conjunto gerado via \texttt{rnorm}. Ambos produzem amostras que reproduzem adequadamente o comportamento médio e a variabilidade da distribuição-alvo. Quando ocorrem pequenas variações (por exemplo, nos extremos ou em probabilidades empíricas), elas são explicadas pela variabilidade amostral: com $n$ fixo, duas amostras independentes de uma mesma distribuição não são idênticas e podem apresentar diferenças pontuais.
+
+Do ponto de vista aplicado, simulações desse tipo são úteis para avaliar estratégias de resfriamento e escalonamento dinâmico de clock, pois permitem modelar cenários de carga e ruído térmico e, a partir disso, estimar a frequência de ultrapassagem de limites operacionais (por exemplo, $P(T>68)$ ou eventos raros como $P(T>75)$). Mesmo quando os dados reais ainda não estão disponíveis, a simulação fornece uma referência probabilística para definir limiares, dimensionar margens de segurança e comparar políticas de controle térmico sob hipóteses plausíveis.
+
+Por fim, geradores de números aleatórios uniformes são a base de muitos sistemas de RNG em computação porque são relativamente simples de implementar e analisar, permitem gerar outras distribuições por meio de transformações matemáticas, como o método de Box--Muller (normal) ou métodos de inversão e aceitação-rejeição, e viabilizam a reprodutibilidade dos experimentos via \textit{seeds}. Assim, a uniformidade atua como um bloco fundamental a partir do qual se constroem simulações e algoritmos probabilísticos mais complexos de forma controlada.
+
+
+
+\end{document}
